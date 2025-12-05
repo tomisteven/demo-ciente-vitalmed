@@ -1,4 +1,4 @@
-const url2 = "https://demo-servidor-vitalmed-psavy8tb2-tomistevens-projects.vercel.app";
+const url2 = "https://demo-servidor-vitalmed.vercel.app";
 const url = "https://api.doctoraecos.com";
 const url3 = "http://localhost:8082";
 
