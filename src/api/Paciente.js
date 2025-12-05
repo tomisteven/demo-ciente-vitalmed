@@ -46,7 +46,7 @@ export class PacienteApi {
 
   async getDoctoresList() {
     try {
-      const response = await fetch(this.url + "/doctores/list", {
+      const response = await fetch(this.url + "doctores/list", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
