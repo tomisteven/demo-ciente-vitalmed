@@ -4,9 +4,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaEye, FaEyeSlash, FaUser, FaLock, FaWhatsapp, FaInstagram } from "react-icons/fa";
 import "./Auth.css";
-import doctora from "../../../assets/vitalmed/Dra.Imag.png";
-import doctoraMovil from "../../../assets/vitalmed/doctoraMovil.png";
-import textlogo from "../../../assets/vitalmed/Logotext.png";
+import doctora from "../../../assets/vitalmed/doctor.png";
+import doctoraMovil from "../../../assets/vitalmed/doctor.png";
+import textlogo from "../../../assets/vitalmed/logotipo.png";
 import { AuthAPI } from "../../../api/auth";
 import ToastMessage from "../../../utils/ToastMessage";
 
@@ -126,7 +126,7 @@ export function Auth() {
           </div>
           <div className="auth-welcome-text">
             <h2>Sistema de Gestión Médica</h2>
-            <p>Dra. Jeremmy Gutierrez</p>
+            <p>Dra. Demo Doctor</p>
           </div>
         </div>
 

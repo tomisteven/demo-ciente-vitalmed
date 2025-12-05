@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaUser, FaGraduationCap, FaInstagram, FaWhatsapp, FaMapMarkerAlt, FaComment } from "react-icons/fa";
 import "./LandingPage.css";
 import doctora from "../assets/vitalmed/doc.png";
-import logo from "../assets/vitalmed/LogoJGIcon.png";
+import logo from "../assets/vitalmed/logotipo2.png";
 
 export default function LandingPage() {
     const navigate = useNavigate();
@@ -25,7 +25,7 @@ export default function LandingPage() {
                 <div className="social-sidebar">
                     <p className="social-sidebar-text">Estoy solo agregá mi Link - agendá tu cita</p>
                     <a
-                        href="https://www.instagram.com/doctoraecos?igsh=MXVnbGZzaXg3YzJxdQ=="
+                        href="https://www.instagram.com/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="social-icon instagram"
@@ -34,7 +34,7 @@ export default function LandingPage() {
                         <FaInstagram />
                     </a>
                     <a
-                        href="https://wa.me/qr/NGJUQHKJKLDWC1"
+                        href="https://wa.me/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="social-icon whatsapp"
@@ -64,8 +64,8 @@ export default function LandingPage() {
                     <div className="logo-container">
                         <img src={logo} alt="Logo" className="logo-icon" />
                         <div className="header-text">
-                            <h1 className="doctor-name">Dra. Jeremmy Gutierrez A.</h1>
-                            <p className="specialty">Ultrasonografía</p>
+                            <h1 className="doctor-name">Dra. Demo Doctor</h1>
+                            <p className="specialty">Demo Especialidad</p>
                         </div>
                     </div>
 
@@ -81,14 +81,10 @@ export default function LandingPage() {
                     <div className="welcome-text">
                         <h2 className="welcome-title">
                             Bienvenidos a<br />
-                            <span className="brand-name">Doctora Ecos</span>
+                            <span className="brand-name">Demo Doctor</span>
                         </h2>
                         <p className="welcome-description">
-                            Estudio de ultrasonografía son una herramienta de diagnóstico
-                            por imagen fundamental y de gran importancia en la medicina
-                            moderna. Utilizan ondas sonoras de alta frecuencia para crear
-                            imágenes en tiempo real de los órganos, tejidos y el flujo
-                            sanguíneo.
+                            Demo Descripción lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod.
                         </p>
                     </div>
 
