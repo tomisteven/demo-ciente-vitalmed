@@ -18,7 +18,7 @@ import MisTurnosPage from "../pages/MisTurnos";
 import UsuarioLogueado from "../pages/Dashboard";
 import LandingPage from "../pages/Landing";
 import Cursos from "../pages/Cursos";
-import NotFound from "../pages/NotFound";
+
 import DocumentacionSistema from "../pages/DocumentacionSistema/DocumentacionSistema";
 
 // Components

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaGraduationCap, FaInstagram, FaWhatsapp, FaMapMarkerAlt, FaComment } from "react-icons/fa";
+import { FaUser, FaGraduationCap, FaInstagram, FaWhatsapp, FaMapMarkerAlt, FaComment, FaBook } from "react-icons/fa";
 import "./LandingPage.css";
 import doctora from "../../assets/vitalmed/doc.png";
 import logo from "../../assets/vitalmed/logotipo2.png";
@@ -14,6 +14,10 @@ export default function LandingPage() {
 
     const handleCursos = () => {
         navigate("/cursos");
+    };
+
+    const handleDocumentacion = () => {
+        navigate("/documentacion");
     };
 
     return (
@@ -96,6 +100,10 @@ export default function LandingPage() {
 
                 {/* Action Buttons */}
                 <div className="action-buttons">
+                    <button className="btn-action btn-cursos" onClick={handleDocumentacion}>
+                        <span>Documentación</span>
+                        <FaBook className="btn-icon" />
+                    </button>
                     <button className="btn-action btn-estudios">
                         <span>estudios</span>
                         <svg className="btn-icon" viewBox="0 0 24 24" fill="currentColor">

@@ -16,6 +16,10 @@ export default function LandingPage() {
         navigate("/cursos");
     };
 
+    const handleDocumentacion = () => {
+        navigate("/documentacion");
+    };
+
     return (
         <div className="landing-container">
 
@@ -96,6 +100,10 @@ export default function LandingPage() {
 
                 {/* Action Buttons */}
                 <div className="action-buttons">
+                    <button className="btn-action btn-documentacion" onClick={handleDocumentacion}>
+                        <span>DOCUMENTACION</span>
+                        <FaGraduationCap className="btn-icon" />
+                    </button>
                     <button className="btn-action btn-estudios">
                         <span>estudios</span>
                         <svg className="btn-icon" viewBox="0 0 24 24" fill="currentColor">
@@ -103,7 +111,7 @@ export default function LandingPage() {
                         </svg>
                     </button>
                     <button className="btn-action btn-cursos" onClick={handleCursos}>
-                        <span>cursos VIP</span>
+                        <span>Cursos VIP</span>
                         <FaGraduationCap className="btn-icon" />
                     </button>
                     <button className="btn-action btn-agenda" onClick={handleInformes}>
