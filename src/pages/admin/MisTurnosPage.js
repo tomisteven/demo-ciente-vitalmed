@@ -1,5 +1,5 @@
 import React from "react";
-import MisTurnos from "../../Components/Admin/MisTurnos";
+import MisTurnos from "../../Components/Turnos/MisTurnos/MisTurnos";
 import "./MisTurnosPage.css";
 
 export default function MisTurnosPage() {

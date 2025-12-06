@@ -4,21 +4,26 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { Auth } from "../pages/admin/index";
-import { AdminLayout } from "../layouts";
-import NotFound from "../pages/admin/Error404";
-import Pacientes from "../pages/admin/Pacientes.js";
-import VerPaciente from "../pages/admin/VerPaciente.js";
-import Doctores from "../pages/admin/Doctores.js";
-import Secretarias from "../pages/admin/Secretarias.js";
-import Turnos from "../pages/admin/Turnos.js";
-import ReservarTurno from "../pages/admin/ReservarTurno.js";
-import MisTurnosPage from "../pages/admin/MisTurnosPage.js";
 import toast, { Toaster } from "react-hot-toast";
-import UsuarioLogueado from "../pages/admin/UsuarioLogueado.js";
-import ProtectedRoute from "../Components/ProtectedRoutes.jsx";
-import LandingPage from "../pages/LandingPage.js";
-import Cursos from "../pages/Cursos.js";
+
+// Pages
+import { Auth } from "../pages/Auth";
+import Pacientes from "../pages/Pacientes";
+import VerPaciente from "../pages/VerPaciente";
+import Doctores from "../pages/Doctores";
+import Secretarias from "../pages/Secretarias";
+import Turnos from "../pages/Turnos";
+import ReservarTurno from "../pages/ReservarTurno";
+import MisTurnosPage from "../pages/MisTurnos";
+import UsuarioLogueado from "../pages/Dashboard";
+import LandingPage from "../pages/Landing";
+import Cursos from "../pages/Cursos";
+import NotFound from "../pages/NotFound";
+import DocumentacionSistema from "../pages/DocumentacionSistema/DocumentacionSistema";
+
+// Components
+import { AdminLayout } from "../layouts";
+import ProtectedRoute from "../Components/ProtectedRoutes";
 
 export function AdminRoutes({ notificacion }) {
   const user = JSON.parse(localStorage.getItem("userLog"));
@@ -42,6 +47,7 @@ export function AdminRoutes({ notificacion }) {
         <Route path="/" element={<LandingPage />} />
         <Route path="/cursos" element={<Cursos />} />
         <Route path="/admin/auth" element={<Auth />} />
+        <Route path="/documentacion" element={<DocumentacionSistema />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     );
@@ -154,6 +160,7 @@ export function AdminRoutes({ notificacion }) {
           </ProtectedRoute>
         }
       />
+
       {/* Si la ruta no existe, redirigí a una ruta por defecto */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

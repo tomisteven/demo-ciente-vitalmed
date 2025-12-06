@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import CrearDisponibilidadForm from "../../Components/Admin/CrearDisponibilidadForm";
-import ListaTurnosAdmin from "../../Components/Admin/ListaTurnosAdmin";
-import GestionEstudios from "../../Components/Admin/GestionEstudios";
-import CalendarioTurnos from "../../Components/Admin/CalendarioTurnos";
+import CrearDisponibilidadForm from "../../Components/Turnos/CrearDisponibilidadForm/CrearDisponibilidadForm";
+import ListaTurnosAdmin from "../../Components/Turnos/ListaTurnosAdmin/ListaTurnosAdmin";
+import GestionEstudios from "../../Components/Estudios/GestionEstudios/GestionEstudios";
+import CalendarioTurnos from "../../Components/Turnos/CalendarioTurnos/CalendarioTurnos";
 
 // En tu componente o página:
 

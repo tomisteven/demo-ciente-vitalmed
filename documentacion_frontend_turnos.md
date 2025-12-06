@@ -10,7 +10,6 @@ Sistema de gestión de turnos médicos que permite a secretarias crear disponibi
 - Puede ver todos los turnos del sistema
 - Puede reservar turnos a nombre de pacientes
 - Puede cancelar cualquier turno
-
 ### 2. Paciente
 - Puede buscar turnos disponibles por especialidad o médico
 - Puede reservar turnos disponibles

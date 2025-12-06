@@ -21,9 +21,9 @@ import ToastMessage from "../../utils/ToastMessage";
 import Loader from "../../utils/Loader";
 import Breadcrumbs from "../../utils/Breadcums";
 import { usePaciente } from "../../hooks/usePacienteIndividual";
-import ModalAsignarDoctor from "../../Components/ModalAsignarDoctor";
+import ModalAsignarDoctor from "../../Components/Pacientes/ModalAsignarDoctor/ModalAsignarDoctor";
 import { LoaderIcon } from "react-hot-toast";
-import ModalNota from "../../Components/ModalNota";
+import ModalNota from "../../Components/Pacientes/ModalNota/ModalNota";
 import "./VerPaciente.css";
 
 export default function VerPaciente() {

@@ -1,14 +1,14 @@
 import React, { useState, Suspense, lazy } from "react";
 import "./AdminLayout.scss";
 import "./AdminLayout.css";
-import AdminMenuMovile from "../../Components/Admin/AdminLayout/AdminMenuMovile/AdminMenuMovile.js";
+import AdminMenuMovile from "../../Components/Layout/AdminMenuMovile/AdminMenuMovile.js";
 
-import { Logout } from "../../Components/Admin/AdminLayout/Logout/Logout";
+import { Logout } from "../../Components/Layout/Logout/Logout";
 
 import Logo from "../../assets/vitalmed/logotipo.png";
 
 const Component_Menu_left = lazy(() =>
-  import("../../Components/Admin/AdminLayout/AdminMenu/AdminMenu")
+  import("../../Components/Layout/AdminMenu/AdminMenu")
 );
 
 export function AdminLayout(props) {
