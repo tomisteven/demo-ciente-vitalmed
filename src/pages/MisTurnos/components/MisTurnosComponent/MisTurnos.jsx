@@ -8,6 +8,8 @@ import {
     ordenarTurnosPorFecha,
 } from "../../../../utils/turnoHelpers";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+import { FaCalendarCheck, FaClock, FaUserMd, FaNotesMedical, FaTimes, FaInbox, FaHistory, FaCalendarAlt } from "react-icons/fa";
 import "./MisTurnos.css";
 
 const turnosApi = new TurnosApi();
@@ -46,11 +48,19 @@ export default function MisTurnos({ pacienteId }) {
     };
 
     const handleCancelar = async (turnoId) => {
-        const confirmar = window.confirm(
-            "¿Está seguro que desea cancelar este turno?"
-        );
+        const result = await Swal.fire({
+            title: "¿Cancelar turno?",
+            text: "¿Está seguro que desea cancelar esta cita médica?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#ef4444",
+            cancelButtonColor: "#64748b",
+            confirmButtonText: "Sí, cancelar",
+            cancelButtonText: "No, mantener",
+            borderRadius: '16px'
+        });
 
-        if (!confirmar) return;
+        if (!result.isConfirmed) return;
 
         try {
             const response = await turnosApi.cancelarTurno(
@@ -59,8 +69,8 @@ export default function MisTurnos({ pacienteId }) {
             );
 
             if (response) {
-                toast.success("Turno cancelado exitosamente");
-                cargarTurnos(); // Recargar turnos
+                toast.success("✓ Turno cancelado correctamente");
+                cargarTurnos();
             }
         } catch (error) {
             console.error("Error al cancelar turno:", error);
@@ -68,105 +78,108 @@ export default function MisTurnos({ pacienteId }) {
         }
     };
 
-    const renderTurno = (turno) => (
-        <div key={turno._id} className="turno-card">
-            <div className="turno-card-header">
-                <div className="turno-fecha">{formatearFechaHora(turno.fecha)}</div>
-                <span
-                    className="turno-badge"
-                    style={{ backgroundColor: getEstadoColor(turno.estado) }}
-                >
-                    {getEstadoLabel(turno.estado)}
-                </span>
-            </div>
+    const renderTurno = (turno) => {
+        const fullDate = formatearFechaHora(turno.fecha);
+        // Extracting day and hour for cleaner display if needed
+        const [fechaStr, horaStr] = fullDate.split(' - ');
 
-            <div className="turno-card-body">
-                <div className="turno-info-row">
-                    <span className="turno-label">Médico:</span>
-                    <span className="turno-value">
-                        {turno.doctor?.nombre || "No especificado"}
-                    </span>
+        return (
+            <div key={turno._id} className="mt-card">
+                <div className="mt-card-header">
+                    <div className="mt-badge-group">
+                        <span className="mt-status-badge" style={{ borderColor: getEstadoColor(turno.estado), color: getEstadoColor(turno.estado) }}>
+                            {getEstadoLabel(turno.estado)}
+                        </span>
+                    </div>
+                    <div className="mt-date-info">
+                        <FaCalendarAlt /> <span>{fechaStr}</span>
+                        <FaClock /> <span>{horaStr}</span>
+                    </div>
                 </div>
 
-                <div className="turno-info-row">
-                    <span className="turno-label">Especialidad:</span>
-                    <span className="turno-value">
-                        {turno.especialidad || "No especificada"}
-                    </span>
+                <div className="mt-card-body">
+                    <div className="mt-info-item">
+                        <div className="mt-icon-circle"><FaUserMd /></div>
+                        <div className="mt-info-text">
+                            <span className="mt-label">Profesional Médico</span>
+                            <span className="mt-value">{turno.doctor?.nombre || "Profesional a cargo"}</span>
+                            <span className="mt-sub-value">{turno.especialidad || "Medicina General"}</span>
+                        </div>
+                    </div>
+
+                    {turno.motivoConsulta && (
+                        <div className="mt-info-item mt-motivo-box">
+                            <div className="mt-icon-circle secondary"><FaNotesMedical /></div>
+                            <div className="mt-info-text">
+                                <span className="mt-label">Motivo de Consulta</span>
+                                <span className="mt-value italic">"{turno.motivoConsulta}"</span>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
-                {turno.motivoConsulta && (
-                    <div className="turno-info-row turno-motivo">
-                        <span className="turno-label">Motivo:</span>
-                        <span className="turno-value">{turno.motivoConsulta}</span>
+                {turno.estado === "reservado" && tabActiva === "proximos" && (
+                    <div className="mt-card-footer">
+                        <button onClick={() => handleCancelar(turno._id)} className="mt-btn-abort">
+                            <FaTimes /> Cancelar Cita
+                        </button>
                     </div>
                 )}
             </div>
-
-            {turno.estado === "reservado" && tabActiva === "proximos" && (
-                <div className="turno-card-footer">
-                    <button
-                        onClick={() => handleCancelar(turno._id)}
-                        className="btn-cancelar-turno"
-                    >
-                        Cancelar Turno
-                    </button>
-                </div>
-            )}
-        </div>
-    );
+        );
+    };
 
     return (
-        <div className="mis-turnos">
-            <h3>Mis Turnos</h3>
-
-            {/* Tabs */}
-            <div className="tabs-container">
-                <button
-                    className={`tab ${tabActiva === "proximos" ? "tab-active" : ""}`}
-                    onClick={() => setTabActiva("proximos")}
-                >
-                    Próximos Turnos
-                    {turnos.proximos.length > 0 && (
-                        <span className="tab-badge">{turnos.proximos.length}</span>
-                    )}
+        <div className="mt-component">
+            {/* Nav Tabs */}
+            <div className="mt-tabs">
+                <button className={`mt-tab ${tabActiva === "proximos" ? "active" : ""}`} onClick={() => setTabActiva("proximos")}>
+                    <FaCalendarCheck />
+                    <span>Próximas Citas</span>
+                    {turnos.proximos.length > 0 && <span className="mt-count">{turnos.proximos.length}</span>}
                 </button>
-                <button
-                    className={`tab ${tabActiva === "pasados" ? "tab-active" : ""}`}
-                    onClick={() => setTabActiva("pasados")}
-                >
-                    Historial
-                    {turnos.pasados.length > 0 && (
-                        <span className="tab-badge">{turnos.pasados.length}</span>
-                    )}
+                <button className={`mt-tab ${tabActiva === "pasados" ? "active" : ""}`} onClick={() => setTabActiva("pasados")}>
+                    <FaHistory />
+                    <span>Historial</span>
+                    {turnos.pasados.length > 0 && <span className="mt-count gray">{turnos.pasados.length}</span>}
                 </button>
             </div>
 
-            {/* Contenido */}
-            <div className="tab-content">
+            {/* Content Area */}
+            <div className="mt-content-grid">
                 {loading ? (
-                    <div className="loading-message">Cargando turnos...</div>
-                ) : tabActiva === "proximos" ? (
-                    turnos.proximos.length === 0 ? (
-                        <div className="empty-message">
-                            <p>No tiene turnos próximos.</p>
-                            <p className="empty-hint">
-                                Puede buscar y reservar turnos disponibles.
-                            </p>
-                        </div>
-                    ) : (
-                        <div className="turnos-list">
-                            {turnos.proximos.map(renderTurno)}
-                        </div>
-                    )
-                ) : turnos.pasados.length === 0 ? (
-                    <div className="empty-message">
-                        <p>No tiene turnos en el historial.</p>
+                    <div className="mt-loader-container">
+                        <div className="mt-spinner"></div>
+                        <p>Sincronizando sus turnos...</p>
                     </div>
                 ) : (
-                    <div className="turnos-list">
-                        {turnos.pasados.map(renderTurno)}
-                    </div>
+                    <>
+                        {tabActiva === "proximos" ? (
+                            turnos.proximos.length === 0 ? (
+                                <div className="mt-empty">
+                                    <div className="mt-empty-icon"><FaInbox /></div>
+                                    <h3>No tienes citas pendientes</h3>
+                                    <p>Cuando reserves un nuevo turno, aparecerá aquí.</p>
+                                </div>
+                            ) : (
+                                <div className="mt-grid">
+                                    {turnos.proximos.map(renderTurno)}
+                                </div>
+                            )
+                        ) : (
+                            turnos.pasados.length === 0 ? (
+                                <div className="mt-empty">
+                                    <div className="mt-empty-icon gray"><FaHistory /></div>
+                                    <h3>Tu historial está vacío</h3>
+                                    <p>Aquí se guardarán tus consultas finalizadas.</p>
+                                </div>
+                            ) : (
+                                <div className="mt-grid">
+                                    {turnos.pasados.map(renderTurno)}
+                                </div>
+                            )
+                        )}
+                    </>
                 )}
             </div>
         </div>

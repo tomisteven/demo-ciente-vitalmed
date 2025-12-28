@@ -15,6 +15,7 @@ const initialState = {
   doctores: [],
   loading: false,
   statusChange: false,
+  visiblePasswords: {}
 };
 
 const doctorReducer = (state, action) => {
@@ -25,6 +26,14 @@ const doctorReducer = (state, action) => {
       return { ...state, loading: action.payload };
     case "TOGGLE_STATUS":
       return { ...state, statusChange: !state.statusChange };
+    case "TOGGLE_PASSWORD":
+      return {
+        ...state,
+        visiblePasswords: {
+          ...state.visiblePasswords,
+          [action.payload]: !state.visiblePasswords[action.payload]
+        }
+      };
     case "SET_SEARCH":
       return { ...state, doctores: action.payload };
     default:
@@ -173,6 +182,10 @@ export const useDoctor = ({ notificacion }) => {
     [refresh]
   );
 
+  const togglePassword = (id) => {
+    dispach({ type: "TOGGLE_PASSWORD", payload: id });
+  };
+
   return {
     doctores: doctoresMemo,
     loading: state.loading,
@@ -186,5 +199,7 @@ export const useDoctor = ({ notificacion }) => {
     openModal,
     closeModal,
     deleteDoctor,
+    togglePassword,
+    visiblePasswords: state.visiblePasswords,
   };
 };

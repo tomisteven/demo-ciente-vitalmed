@@ -1,6 +1,7 @@
 import React from "react";
 import { useBuscadorTurnos } from "./useBuscadorTurnos";
 import TarjetaTurno from "../TarjetaTurno/TarjetaTurno";
+import { FaSearch, FaUserMd, FaStethoscope, FaCalendarAlt, FaFilter, FaInbox } from "react-icons/fa";
 import "./BuscadorTurnos.css";
 
 export default function BuscadorTurnos() {
@@ -17,80 +18,98 @@ export default function BuscadorTurnos() {
     } = useBuscadorTurnos();
 
     return (
-        <div className="buscador-turnos">
-            <h3>Buscar Turnos Disponibles</h3>
-            <p className="buscador-description">
-                Seleccione la especialidad y/o médico para ver los turnos disponibles.
-            </p>
+        <div className="bus-wrapper">
+            {/* Filter Section */}
+            <section className="bus-controls-card">
+                <header className="bus-controls-header">
+                    <div className="bus-c-title">
+                        <FaFilter />
+                        <h4>Filtros de Búsqueda</h4>
+                    </div>
+                </header>
 
-            <form onSubmit={buscarTurnos} className="buscador-form">
-                <div className="form-row">
-                    <div className="form-group">
-                        <label htmlFor="especialidad">Especialidad</label>
-                        <select
-                            id="especialidad"
-                            name="especialidad"
-                            value={filtros.especialidad}
-                            onChange={handleChange}
-                        >
-                            <option value="">Todas las especialidades</option>
-                            {especialidades.map((esp) => (
-                                <option key={esp} value={esp}>{esp}</option>
-                            ))}
-                        </select>
+                <form onSubmit={buscarTurnos} className="bus-form">
+                    <div className="bus-grid">
+                        <div className="bus-input-group">
+                            <label><FaStethoscope /> Especialidad</label>
+                            <select
+                                name="especialidad"
+                                value={filtros.especialidad}
+                                onChange={handleChange}
+                            >
+                                <option value="">Todas las especialidades</option>
+                                {especialidades.map((esp) => (
+                                    <option key={esp} value={esp}>{esp}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="bus-input-group">
+                            <label><FaUserMd /> Médico Requerido</label>
+                            <select
+                                name="doctorId"
+                                value={filtros.doctorId}
+                                onChange={handleChange}
+                            >
+                                <option value="">Cualquier profesional</option>
+                                {doctoresFiltrados.map((doctor) => (
+                                    <option key={doctor._id} value={doctor._id}>
+                                        {doctor.nombre}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="bus-input-group">
+                            <label><FaCalendarAlt /> Fecha Preferida</label>
+                            <input
+                                type="date"
+                                name="fecha"
+                                value={filtros.fecha}
+                                onChange={handleChange}
+                            />
+                        </div>
                     </div>
 
-                    <div className="form-group">
-                        <label htmlFor="doctorId">Médico (opcional)</label>
-                        <select
-                            id="doctorId"
-                            name="doctorId"
-                            value={filtros.doctorId}
-                            onChange={handleChange}
-                        >
-                            <option value="">Todos los médicos</option>
-                            {doctoresFiltrados.map((doctor) => (
-                                <option key={doctor._id} value={doctor._id}>
-                                    {doctor.nombre}
-                                </option>
-                            ))}
-                        </select>
+                    <div className="bus-form-footer">
+                        <button type="submit" className="bus-btn-search" disabled={loading}>
+                            {loading ? (
+                                <>
+                                    <div className="bus-spinner"></div>
+                                    <span>Buscando...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <FaSearch />
+                                    <span>Ver Disponibilidad</span>
+                                </>
+                            )}
+                        </button>
                     </div>
+                </form>
+            </section>
 
-                    <div className="form-group">
-                        <label htmlFor="fecha">Fecha (opcional)</label>
-                        <input
-                            type="date"
-                            id="fecha"
-                            name="fecha"
-                            value={filtros.fecha}
-                            onChange={handleChange}
-                        />
-                    </div>
-                </div>
-
-                <div className="form-actions">
-                    <button type="submit" className="btn-buscar" disabled={loading}>
-                        {loading ? "Buscando..." : "Buscar Turnos"}
-                    </button>
-                </div>
-            </form>
-
-            <div className="resultados-container">
+            {/* Results Section */}
+            <section className="bus-results-area">
                 {loading ? (
-                    <div className="loading-message">Buscando turnos disponibles...</div>
+                    <div className="bus-state-container">
+                        <div className="bus-big-loader"></div>
+                        <p>Estamos consultando la agenda de nuestros profesionales...</p>
+                    </div>
                 ) : busquedaRealizada ? (
                     turnos.length === 0 ? (
-                        <div className="empty-message">
-                            <p>No se encontraron turnos disponibles con los filtros seleccionados.</p>
-                            <p className="empty-hint">Intente con otra especialidad o fecha.</p>
+                        <div className="bus-state-container bus-empty">
+                            <div className="bus-empty-icon"><FaInbox /></div>
+                            <h3>No se encontraron turnos</h3>
+                            <p>Lo sentimos, no hay turnos disponibles que coincidan con tus criterios. Intenta con otra especialidad o amplia el rango de fecha.</p>
                         </div>
                     ) : (
-                        <>
-                            <div className="resultados-header">
-                                <h4>Turnos Disponibles ({turnos.length})</h4>
+                        <div className="bus-results-content">
+                            <div className="bus-results-header">
+                                <h3>Turnos Disponibles</h3>
+                                <span className="bus-results-count">{turnos.length} opciones encontradas</span>
                             </div>
-                            <div className="turnos-grid">
+                            <div className="bus-grid-results">
                                 {turnos.map((turno) => (
                                     <TarjetaTurno
                                         key={turno._id}
@@ -99,14 +118,16 @@ export default function BuscadorTurnos() {
                                     />
                                 ))}
                             </div>
-                        </>
+                        </div>
                     )
                 ) : (
-                    <div className="info-message">
-                        Utilice los filtros para buscar turnos disponibles.
+                    <div className="bus-state-container bus-welcome">
+                        <div className="bus-welcome-icon"><FaSearch /></div>
+                        <h3>Empieza tu búsqueda</h3>
+                        <p>Selecciona una especialidad o un médico para descubrir los horarios disponibles.</p>
                     </div>
                 )}
-            </div>
+            </section>
         </div>
     );
 }

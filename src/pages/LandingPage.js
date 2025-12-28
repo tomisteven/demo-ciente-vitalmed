@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaGraduationCap, FaInstagram, FaWhatsapp, FaMapMarkerAlt, FaComment } from "react-icons/fa";
 import "./LandingPage.css";
-import doctora from "../assets/vitalmed/doc.png";
+import doctores from "../assets/vitalmed/doctores.png";
 import logo from "../assets/vitalmed/logotipo2.png";
 
 export default function LandingPage() {
@@ -84,8 +84,7 @@ export default function LandingPage() {
                 <div className="welcome-section">
                     <div className="welcome-text">
                         <h2 className="welcome-title">
-                            Bienvenidos a<br />
-                            <span className="brand-name">Demo Doctor</span>
+                            Bienvenidos a <span className="brand-name">Demo Doctor</span>
                         </h2>
                         <p className="welcome-description">
                             Demo Descripción lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod.
@@ -94,7 +93,7 @@ export default function LandingPage() {
 
                     {/* Doctor Image */}
                     <div className="doctor-image-container">
-                        <img src={doctora} alt="Dra. Jeremmy Gutierrez" className="doctor-image" />
+                        <img src={doctores} alt="Dra. Jeremmy Gutierrez" className="doctor-image" />
                     </div>
                 </div>
 

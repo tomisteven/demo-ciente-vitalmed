@@ -2,9 +2,7 @@ import React, { useState, Suspense, lazy } from "react";
 import "./AdminLayout.scss";
 import "./AdminLayout.css";
 import AdminMenuMovile from "../../Components/Layout/AdminMenuMovile/AdminMenuMovile.js";
-
-import { Logout } from "../../Components/Layout/Logout/Logout";
-
+import TopBar from "../../Components/Layout/TopBar/TopBar";
 import Logo from "../../assets/vitalmed/logotipo.png";
 
 const Component_Menu_left = lazy(() =>
@@ -25,10 +23,12 @@ export function AdminLayout(props) {
         <div className="admin-layout__left">
           <img className="logo" src={Logo} alt="logo" />
           <Component_Menu_left onLoad={handleLoading} />
-          <Logout onLoad={handleLoading} />
         </div>
         <AdminMenuMovile />
-        <div className="admin-layout__right-content">{children}</div>
+        <div className="admin-layout__right-column">
+          <TopBar />
+          <div className="admin-layout__right-content">{children}</div>
+        </div>
       </Suspense>
 
 

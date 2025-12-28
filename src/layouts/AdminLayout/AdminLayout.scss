@@ -14,7 +14,7 @@ $widthLeftMenuExpanded: 200px;
   &__left {
     width: $widthLeftMenuCollapsed;
     min-width: $widthLeftMenuCollapsed;
-    background: linear-gradient(180deg, rgba(6, 0, 61, 0.95) 0%, rgba(15, 10, 80, 0.95) 100%);
+    background: #0f172a;
     overflow: hidden;
     height: 100vh;
     position: fixed;
@@ -40,14 +40,14 @@ $widthLeftMenuExpanded: 200px;
     position: relative;
     top: 0;
     left: 0;
-    margin: 20px auto 10px;
-    height: 50px;
-    width: 50px;
+    margin: 20px auto 30px;
+    height: 44px;
+    width: 44px;
     object-fit: contain;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 12px;
-    padding: 8px;
-    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.03);
   }
 
   &__left:hover .logo {

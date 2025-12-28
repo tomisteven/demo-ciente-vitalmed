@@ -1,5 +1,6 @@
 import React from "react";
 import { useModalAsignarTurno } from "./useModalAsignarTurno";
+import { FaUserPlus, FaTimes, FaCalendarAlt, FaUserMd, FaNotesMedical, FaSearch, FaUserInjured, FaFlask } from "react-icons/fa";
 import "./ModalAsignarTurno.css";
 
 export default function ModalAsignarTurno({ turno, onClose, onAsignado }) {
@@ -20,150 +21,127 @@ export default function ModalAsignarTurno({ turno, onClose, onAsignado }) {
     } = useModalAsignarTurno(turno, onClose, onAsignado);
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content-asignar" onClick={(e) => e.stopPropagation()}>
-                <div className="modal-header">
-                    <h4>Asignar Turno a Paciente</h4>
-                    <button className="modal-close" onClick={onClose}>×</button>
-                </div>
-
-                <div className="modal-body">
-                    <div className="turno-info-box">
-                        <h5>Información del Turno</h5>
-                        <p>
-                            <strong>Fecha y Hora:</strong>{" "}
-                            {new Date(turno.fecha).toLocaleString("es-AR", {
-                                weekday: "long",
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                            })}
-                        </p>
-                        <p><strong>Doctor:</strong> {turno.doctor?.nombre || "No especificado"}</p>
-                        <p><strong>Especialidad:</strong> {turno.especialidad || "No especificada"}</p>
+        <div className="ma-overlay" onClick={onClose}>
+            <div className="ma-content scale-in" onClick={(e) => e.stopPropagation()}>
+                <header className="ma-header">
+                    <div className="ma-title-box">
+                        <div className="ma-icon-circle"><FaUserPlus /></div>
+                        <h3>Asignar Turno Médico</h3>
                     </div>
+                    <button className="ma-close-btn" onClick={onClose}><FaTimes /></button>
+                </header>
 
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label htmlFor="busqueda">Buscar Paciente</label>
-                            <input
-                                type="text"
-                                id="busqueda"
-                                placeholder="Buscar por nombre, DNI o email..."
-                                value={busqueda}
-                                onChange={(e) => setBusqueda(e.target.value)}
-                                disabled={loading || loadingPacientes}
-                                className="input-busqueda"
-                            />
-                            <small className="help-text">
-                                {loadingPacientes
-                                    ? "Cargando pacientes..."
-                                    : `${pacientesFiltrados.length} de ${pacientes.length} pacientes`}
-                            </small>
+                <div className="ma-body">
+                    {/* Turno Summary Info */}
+                    <section className="ma-info-strip">
+                        <div className="ma-info-pill">
+                            <FaCalendarAlt />
+                            <div>
+                                <label>Fecha y Hora</label>
+                                <span>{new Date(turno.fecha).toLocaleString("es-AR", {
+                                    day: "numeric", month: "short", hour: "2-digit", minute: "2-digit"
+                                })}</span>
+                            </div>
+                        </div>
+                        <div className="ma-info-pill">
+                            <FaUserMd />
+                            <div>
+                                <label>Profesional</label>
+                                <span>{turno.doctor?.nombre || "No asignado"}</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <form onSubmit={handleSubmit} className="ma-form">
+                        {/* Patient Search Section */}
+                        <div className="ma-form-section">
+                            <label className="ma-label"><FaSearch /> Buscar Paciente</label>
+                            <div className="ma-search-wrapper">
+                                <input
+                                    type="text"
+                                    placeholder="Nombre, DNI o Email..."
+                                    value={busqueda}
+                                    onChange={(e) => setBusqueda(e.target.value)}
+                                    className="ma-input-search"
+                                />
+                                {loadingPacientes && <div className="ma-inner-spinner"></div>}
+                            </div>
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="pacienteId">
-                                Seleccionar Paciente <span className="required">*</span>
-                            </label>
+                        <div className="ma-form-section">
+                            <label className="ma-label"><FaUserInjured /> Seleccionar de la lista <span className="req">*</span></label>
                             <select
-                                id="pacienteId"
                                 name="pacienteId"
                                 value={formData.pacienteId}
                                 onChange={handleChange}
                                 required
-                                disabled={loading || loadingPacientes}
-                                size="6"
-                                className="select-pacientes"
+                                size="5"
+                                className="ma-select-list"
                             >
-                                <option value="">-- Seleccione un paciente --</option>
+                                <option value="" disabled>-- Elija un paciente --</option>
                                 {pacientesFiltrados.map((paciente) => (
                                     <option key={paciente._id} value={paciente._id}>
-                                        {paciente.nombre} {paciente.dni ? `- DNI: ${paciente.dni}` : ""}
+                                        {paciente.nombre} {paciente.dni ? `(${paciente.dni})` : ""}
                                     </option>
                                 ))}
                             </select>
                             {pacientesFiltrados.length === 0 && !loadingPacientes && (
-                                <small className="help-text error-text">
-                                    No se encontraron pacientes con ese criterio de búsqueda
-                                </small>
+                                <p className="ma-error-msg">No se encontraron coincidencias.</p>
                             )}
                         </div>
 
+                        {/* Selected Patient Extra Info */}
                         {pacienteSeleccionado && (
-                            <div className="paciente-info-box">
-                                <p><strong>Email:</strong> {pacienteSeleccionado.email || "No especificado"}</p>
-                                <p><strong>Teléfono:</strong> {pacienteSeleccionado.telefono || "No especificado"}</p>
+                            <div className="ma-extra-info-card success">
+                                <p><strong>Email:</strong> {pacienteSeleccionado.email || "---"}</p>
+                                <p><strong>Teléfono:</strong> {pacienteSeleccionado.telefono || "---"}</p>
                             </div>
                         )}
 
-                        <div className="form-group">
-                            <label htmlFor="estudioId">
-                                Estudio a Realizar <span className="required">*</span>
-                            </label>
+                        {/* Study Selection */}
+                        <div className="ma-form-section">
+                            <label className="ma-label"><FaFlask /> Estudio a realizar <span className="req">*</span></label>
                             <select
-                                id="estudioId"
                                 name="estudioId"
                                 value={formData.estudioId}
                                 onChange={handleChange}
                                 required
-                                disabled={loading || loadingEstudios}
-                                className="select-estudio"
+                                className="ma-input"
                             >
-                                <option value="">
-                                    {loadingEstudios ? "Cargando estudios..." : "-- Seleccione un estudio --"}
-                                </option>
+                                <option value="">{loadingEstudios ? "Cargando estudios..." : "-- Seleccione un estudio --"}</option>
                                 {estudios.map((estudio) => (
                                     <option key={estudio._id} value={estudio._id}>
                                         {estudio.tipo} {estudio.precio ? `- $${estudio.precio}` : ""}
                                     </option>
                                 ))}
                             </select>
-                            {estudios.length === 0 && !loadingEstudios && (
-                                <small className="help-text error-text">No hay estudios disponibles</small>
-                            )}
                         </div>
 
                         {estudioSeleccionado?.aclaraciones && (
-                            <div className="estudio-info-box">
+                            <div className="ma-extra-info-card warning">
                                 <p><strong>Aclaraciones:</strong> {estudioSeleccionado.aclaraciones}</p>
                             </div>
                         )}
 
-                        <div className="form-group">
-                            <label htmlFor="motivoConsulta">
-                                Motivo de Consulta <span className="required">*</span>
-                            </label>
+                        {/* Observations */}
+                        <div className="ma-form-section">
+                            <label className="ma-label"><FaNotesMedical /> Motivo / Observaciones <span className="req">*</span></label>
                             <textarea
-                                id="motivoConsulta"
                                 name="motivoConsulta"
                                 value={formData.motivoConsulta}
                                 onChange={handleChange}
                                 placeholder="Describa el motivo de la consulta..."
-                                rows="4"
-                                disabled={loading}
+                                className="ma-textarea"
+                                required
                             />
                         </div>
 
-                        <div className="modal-footer">
-                            <button
-                                type="button"
-                                onClick={onClose}
-                                className="btn-cancelar-modal"
-                                disabled={loading}
-                            >
-                                Cancelar
+                        <footer className="ma-footer">
+                            <button type="button" onClick={onClose} className="ma-btn-cancel">Cancelar</button>
+                            <button type="submit" className="ma-btn-submit" disabled={loading}>
+                                {loading ? "Procesando..." : "Confirmar Asignación"}
                             </button>
-                            <button
-                                type="submit"
-                                className="btn-asignar-modal"
-                                disabled={loading || loadingPacientes || loadingEstudios}
-                            >
-                                {loading ? "Asignando..." : "Asignar Turno"}
-                            </button>
-                        </div>
+                        </footer>
                     </form>
                 </div>
             </div>

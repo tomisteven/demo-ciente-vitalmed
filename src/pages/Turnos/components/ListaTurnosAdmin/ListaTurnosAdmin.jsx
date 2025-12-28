@@ -2,6 +2,7 @@ import React from "react";
 import { useListaTurnosAdmin } from "./useListaTurnosAdmin";
 import { formatearFechaHora } from "../../../../utils/dateHelpers";
 import { getEstadoColor, getEstadoLabel } from "../../../../utils/turnoHelpers";
+import { FaSearch, FaEraser, FaUserPlus, FaCalendarTimes, FaFilter } from "react-icons/fa";
 import ModalAsignarTurno from "../ModalAsignarTurno/ModalAsignarTurno";
 import "./ListaTurnosAdmin.css";
 
@@ -24,165 +25,152 @@ export default function ListaTurnosAdmin() {
     } = useListaTurnosAdmin();
 
     return (
-        <div className="lista-turnos-admin">
-            <h3>Gestión de Turnos</h3>
+        <div className="adm-view-wrapper">
+            <header className="adm-header">
+                <div className="adm-title-box">
+                    <div className="adm-icon-box"><FaFilter /></div>
+                    <h3>Filtros de Búsqueda</h3>
+                </div>
+            </header>
 
-            {/* Filtros */}
-            <div className="filtros-container">
-                <div className="filtros-row">
-                    <div className="filtro-group">
-                        <label>Estado</label>
-                        <select
-                            name="estado"
-                            value={filtros.estado}
-                            onChange={handleFiltroChange}
-                        >
-                            <option value="">Todos</option>
+            {/* Polished Filters Section */}
+            <div className="adm-filters-card">
+                <div className="adm-filters-grid">
+                    <div className="adm-input-group">
+                        <label>Estado del Turno</label>
+                        <select name="estado" value={filtros.estado} onChange={handleFiltroChange}>
+                            <option value="">Cualquier estado</option>
                             <option value="disponible">Disponible</option>
                             <option value="reservado">Reservado</option>
                             <option value="finalizado">Finalizado</option>
+                            <option value="cancelado">Cancelado</option>
                         </select>
                     </div>
 
-                    <div className="filtro-group">
-                        <label>Doctor</label>
-                        <select
-                            name="doctorId"
-                            value={filtros.doctorId}
-                            onChange={handleFiltroChange}
-                        >
-                            <option value="">Todos</option>
+                    <div className="adm-input-group">
+                        <label>Médico Especialista</label>
+                        <select name="doctorId" value={filtros.doctorId} onChange={handleFiltroChange}>
+                            <option value="">Todos los médicos</option>
                             {doctores.map((doctor) => (
-                                <option key={doctor._id} value={doctor._id}>
-                                    {doctor.nombre}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-group">
-                        <label>Estudio</label>
-                        <select
-                            name="estudio"
-                            value={filtros.estudio}
-                            onChange={handleFiltroChange}
-                        >
-                            <option value="">Todos</option>
-                            {estudios.map((estudio) => (
-                                <option key={estudio._id} value={estudio._id}>
-                                    {estudio.tipo}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="filtro-group">
-                        <label>Especialidad</label>
-                        <select
-                            name="especialidad"
-                            value={filtros.especialidad}
-                            onChange={handleFiltroChange}
-                        >
-                            <option value="">Todas</option>
-                            {especialidades.map((esp) => (
-                                <option key={esp} value={esp}>
-                                    {esp}
-                                </option>
+                                <option key={doctor._id} value={doctor._id}>{doctor.nombre}</option>
                             ))}
                         </select>
                     </div>
 
-                    <div className="filtro-group">
-                        <label>Fecha</label>
-                        <input
-                            type="date"
-                            name="fecha"
-                            value={filtros.fecha}
-                            onChange={handleFiltroChange}
-                        />
+                    <div className="adm-input-group">
+                        <label>Tipo de Estudio</label>
+                        <select name="estudio" value={filtros.estudio} onChange={handleFiltroChange}>
+                            <option value="">Todos los estudios</option>
+                            {estudios.map((estudio) => (
+                                <option key={estudio._id} value={estudio._id}>{estudio.tipo}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="adm-input-group">
+                        <label>Especialidad</label>
+                        <select name="especialidad" value={filtros.especialidad} onChange={handleFiltroChange}>
+                            <option value="">Todas las especialidades</option>
+                            {especialidades.map((esp) => (
+                                <option key={esp} value={esp}>{esp}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="adm-input-group">
+                        <label>Fecha de Atención</label>
+                        <input type="date" name="fecha" value={filtros.fecha} onChange={handleFiltroChange} />
                     </div>
                 </div>
 
-                <div className="filtros-actions">
-                    <button onClick={aplicarFiltros} className="btn-aplicar">
-                        Buscar
+                <div className="adm-filters-footer">
+                    <button onClick={limpiarFiltros} className="adm-btn-secondary">
+                        <FaEraser /> <span>Limpiar Filtros</span>
                     </button>
-                    <button onClick={limpiarFiltros} className="btn-limpiar">
-                        Limpiar
+                    <button onClick={aplicarFiltros} className="adm-btn-primary">
+                        <FaSearch /> <span>Buscar Turnos</span>
                     </button>
                 </div>
             </div>
 
-            {/* Tabla de turnos */}
-            <div className="tabla-container">
+            {/* Results Section */}
+            <div className="adm-results-area">
                 {loading ? (
-                    <div className="loading-message">Cargando turnos...</div>
+                    <div className="adm-loading-state">
+                        <div className="adm-spinner"></div>
+                        <p>Filtrando resultados...</p>
+                    </div>
                 ) : turnos.length === 0 ? (
-                    <div className="empty-message">
-                        No se encontraron turnos con los filtros aplicados.
+                    <div className="adm-empty-state">
+                        <div className="adm-empty-icon"><FaSearch /></div>
+                        <h4>No encontramos resultados</h4>
+                        <p>Intenta ajustar tus filtros para encontrar lo que buscas.</p>
                     </div>
                 ) : (
-                    <table className="tabla-turnos">
-                        <thead>
-                            <tr>
-                                <th>Fecha y Hora</th>
-                                <th>Doctor</th>
-                                <th>Estudio</th>
-                                <th>Paciente</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {turnos.map((turno) => (
-                                <tr key={turno._id}>
-                                    <td className="fecha-cell">
-                                        {formatearFechaHora(turno.fecha)}
-                                    </td>
-                                    <td>
-                                        {turno.doctor?.nombre || "Doctor no especificado"}
-                                    </td>
-                                    <td>{turno.estudio?.tipo || "-"}</td>
-                                    <td>
-                                        {turno.paciente?.nombre || (
-                                            <span className="text-muted">Disponible</span>
-                                        )}
-                                    </td>
-                                    <td>
-                                        <span
-                                            className="badge-estado"
-                                            style={{
-                                                backgroundColor: getEstadoColor(turno.estado),
-                                            }}
-                                        >
-                                            {getEstadoLabel(turno.estado)}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        {turno.estado === "disponible" && (
-                                            <button
-                                                onClick={() => handleAsignarTurno(turno)}
-                                                className="btn-asignar"
-                                            >
-                                                Asignar
-                                            </button>
-                                        )}
-                                        {turno.estado === "reservado" && (
-                                            <button
-                                                onClick={() => handleCancelar(turno._id)}
-                                                className="btn-cancelar"
-                                            >
-                                                Cancelar
-                                            </button>
-                                        )}
-                                    </td>
+                    <div className="adm-table-wrapper">
+                        <table className="adm-table">
+                            <thead>
+                                <tr>
+                                    <th>Horario</th>
+                                    <th>Profesional</th>
+                                    <th>Estudio / Servicio</th>
+                                    <th>Paciente</th>
+                                    <th>Estado</th>
+                                    <th className="text-right">Acciones</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {turnos.map((turno) => (
+                                    <tr key={turno._id}>
+                                        <td className="adm-td-time">
+                                            {formatearFechaHora(turno.fecha)}
+                                        </td>
+                                        <td className="adm-td-doctor">
+                                            <span>{turno.doctor?.nombre || "No asignado"}</span>
+                                            <small>{turno.doctor?.especialidad}</small>
+                                        </td>
+                                        <td className="adm-td-study">{turno.estudio?.tipo || "Consulta"}</td>
+                                        <td className="adm-td-patient">
+                                            {turno.paciente ? (
+                                                <div className="adm-patient-box">
+                                                    <span>{turno.paciente.nombre}</span>
+                                                    <small>DNI: {turno.paciente.dni}</small>
+                                                </div>
+                                            ) : (
+                                                <span className="adm-available-text">Disponible</span>
+                                            )}
+                                        </td>
+                                        <td>
+                                            <span className={`adm-badge status-${turno.estado}`}>
+                                                {getEstadoLabel(turno.estado)}
+                                            </span>
+                                        </td>
+                                        <td className="text-right">
+                                            <div className="adm-actions-cell">
+                                                {turno.estado === "disponible" && (
+                                                    <button onClick={() => handleAsignarTurno(turno)} className="adm-btn-action success" title="Asignar Turno">
+                                                        <FaUserPlus /> <span>Asignar</span>
+                                                    </button>
+                                                )}
+                                                {turno.estado === "reservado" && (
+                                                    <button onClick={() => handleCancelar(turno._id)} className="adm-btn-action danger" title="Cancelar Turno">
+                                                        <FaCalendarTimes /> <span>Cancelar</span>
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
-            </div>
 
-            <div className="resultados-info">
-                Total de turnos: <strong>{turnos.length}</strong>
+                {!loading && turnos.length > 0 && (
+                    <div className="adm-results-summary">
+                        Mostrando <strong>{turnos.length}</strong> turnos programados
+                    </div>
+                )}
             </div>
 
             {/* Modal Asignar Turno */}

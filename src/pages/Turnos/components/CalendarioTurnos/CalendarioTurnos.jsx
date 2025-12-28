@@ -3,6 +3,7 @@ import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { es } from "date-fns/locale";
 import { useCalendarioTurnos } from "./useCalendarioTurnos";
+import { FaCalendarCheck, FaCalendarDay, FaCalendarTimes, FaCalendarAlt } from "react-icons/fa";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./CalendarioTurnos.css";
 
@@ -61,54 +62,65 @@ export default function CalendarioTurnos() {
 
     // Componente personalizado para mostrar eventos
     const EventComponent = ({ event }) => (
-        <div className="custom-event">
-            <span className="event-title">{event.title}</span>
+        <div className="cal-custom-event">
+            <span className="cal-event-title">{event.title}</span>
             {view !== "month" && (
-                <span className="event-detail">{event.estudio}</span>
+                <span className="cal-event-detail">{event.estudio}</span>
             )}
         </div>
     );
 
     if (loading) {
         return (
-            <div className="calendario-loading">
-                <div className="spinner"></div>
-                <p>Cargando calendario...</p>
+            <div className="cal-loading">
+                <div className="cal-spinner"></div>
+                <p>Preparando su agenda...</p>
             </div>
         );
     }
 
     return (
-        <div className="calendario-turnos">
-            <div className="calendario-header">
-                <h3>📅 Calendario de Turnos</h3>
-                <div className="calendario-stats">
-                    <span className="stat-item">
-                        <span className="stat-number">{stats.total}</span>
-                        <span className="stat-label">turnos totales</span>
-                    </span>
-                    <span className="stat-item">
-                        <span className="stat-number">{stats.disponibles}</span>
-                        <span className="stat-label">turnos disponibles</span>
-                    </span>
-                    <span className="stat-item">
-                        <span className="stat-number">{stats.reservados}</span>
-                        <span className="stat-label">turnos reservados</span>
-                    </span>
-                    <span className="stat-item">
-                        <span className="stat-number">{stats.cancelados}</span>
-                        <span className="stat-label">turnos cancelados</span>
-                    </span>
+        <div className="cal-view-wrapper">
+            <header className="cal-header-section">
+                <div className="cal-stats-grid">
+                    <div className="cal-stat-card total">
+                        <div className="cal-stat-icon"><FaCalendarAlt /></div>
+                        <div className="cal-stat-info">
+                            <span className="cal-stat-val">{stats.total}</span>
+                            <span className="cal-stat-lbl">Totales</span>
+                        </div>
+                    </div>
+                    <div className="cal-stat-card success">
+                        <div className="cal-stat-icon"><FaCalendarCheck /></div>
+                        <div className="cal-stat-info">
+                            <span className="cal-stat-val">{stats.disponibles}</span>
+                            <span className="cal-stat-lbl">Disponibles</span>
+                        </div>
+                    </div>
+                    <div className="cal-stat-card warning">
+                        <div className="cal-stat-icon"><FaCalendarDay /></div>
+                        <div className="cal-stat-info">
+                            <span className="cal-stat-val">{stats.reservados}</span>
+                            <span className="cal-stat-lbl">Reservados</span>
+                        </div>
+                    </div>
+                    <div className="cal-stat-card danger">
+                        <div className="cal-stat-icon"><FaCalendarTimes /></div>
+                        <div className="cal-stat-info">
+                            <span className="cal-stat-val">{stats.cancelados}</span>
+                            <span className="cal-stat-lbl">Cancelados</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </header>
 
-            <div className="calendario-container">
+            <div className="cal-main-container">
                 <Calendar
                     localizer={localizer}
                     events={eventos}
                     startAccessor="start"
                     endAccessor="end"
-                    style={{ height: 700 }}
+                    style={{ height: '70vh', minHeight: '600px' }}
                     views={["month", "week", "day", "agenda"]}
                     view={view}
                     date={date}
@@ -127,24 +139,24 @@ export default function CalendarioTurnos() {
                 />
             </div>
 
-            <div className="calendario-legend">
-                <div className="legend-item">
-                    <span className="legend-color disponible"></span>
+            <footer className="cal-legend-bar">
+                <div className="cal-leg-item">
+                    <span className="cal-leg-dot disponible"></span>
                     <span>Disponible</span>
                 </div>
-                <div className="legend-item">
-                    <span className="legend-color reservado"></span>
+                <div className="cal-leg-item">
+                    <span className="cal-leg-dot reservado"></span>
                     <span>Reservado</span>
                 </div>
-                <div className="legend-item">
-                    <span className="legend-color completado"></span>
+                <div className="cal-leg-item">
+                    <span className="cal-leg-dot completado"></span>
                     <span>Completado</span>
                 </div>
-                <div className="legend-item">
-                    <span className="legend-color cancelado"></span>
+                <div className="cal-leg-item">
+                    <span className="cal-leg-dot cancelado"></span>
                     <span>Cancelado</span>
                 </div>
-            </div>
+            </footer>
         </div>
     );
 }

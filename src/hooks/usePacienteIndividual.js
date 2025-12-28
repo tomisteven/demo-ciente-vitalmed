@@ -7,6 +7,7 @@ import ToastMessage from "../utils/ToastMessage";
 const PacienteController = new PacienteApi();
 const initialState = {
   paciente: null,
+  turnos: [],
   documentos: [],
   modalOpen: false,
   nombreArchivo: "",
@@ -44,6 +45,8 @@ function reducer(state, action) {
     // dentro del reducer
     case "SET_DOCTORES_LIST":
       return { ...state, doctoresList: action.payload };
+    case "SET_TURNOS":
+      return { ...state, turnos: action.payload };
 
     case "SET_LOADING_DOCTORES":
       return { ...state, loadingDoctores: action.payload };
@@ -81,6 +84,7 @@ export function usePaciente({ showToast }) {
 
         dispatch({ type: "SET_PACIENTE_NO_ENCONTRADO", payload: false });
         dispatch({ type: "SET_PACIENTE", payload: response.paciente });
+        dispatch({ type: "SET_TURNOS", payload: response.turnos });
         dispatch({
           type: "SET_DOCUMENTOS",
           payload: response.documentosAgrupados,

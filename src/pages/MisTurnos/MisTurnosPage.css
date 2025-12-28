@@ -1,75 +1,160 @@
-.mis-turnos-page {
-    padding: 2rem;
-    max-width: 1400px;
+.mt-page-wrapper {
+    min-height: calc(100vh - 80px);
+    background-color: #f8fafc;
+    padding: 2rem 1.5rem;
+}
+
+.mt-container {
+    max-width: 1000px;
     margin: 0 auto;
-    min-height: calc(100vh - 200px);
 }
 
-.page-header {
-    margin-bottom: 1.5rem;
-    text-align: center;
-    padding: 1rem 0;
-
-    border-radius: 12px;
-
+/* Header Styles */
+.mt-header {
+    margin-bottom: 2.5rem;
 }
 
-.page-header h2 {
-    margin: 0 0 0.75rem 0;
-    color: #ffffff;
-    font-size: 2.5rem;
+.mt-header-content {
+    margin-top: 1.5rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e2e8f0;
+}
+
+.mt-title-group {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.mt-icon-box {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    color: white;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.3);
+}
+
+.mt-text-box h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1e293b;
+    letter-spacing: -0.025em;
+}
+
+.mt-text-box p {
+    margin: 0.4rem 0 0;
+    color: #64748b;
+    font-size: 1rem;
+}
+
+.mt-text-box strong {
+    color: #0ea5e9;
     font-weight: 700;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.page-description {
-    color: rgba(255, 255, 255, 0.95);
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 400;
-
+/* Main Content Area */
+.mt-main-content {
+    animation: mtFadeUp 0.6s ease-out;
 }
 
-.error-message {
-    background: #fff;
-    padding: 4rem 3rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+/* Error / Unauthorized State */
+.mt-error-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+}
+
+.mt-error-card {
+    background: white;
+    padding: 3rem 2rem;
+    border-radius: 24px;
     text-align: center;
-    border-left: 4px solid #dc3545;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
 }
 
-.error-message p {
-    color: #dc3545;
-    font-size: 1.2rem;
-    margin: 0;
-    font-weight: 500;
+.mt-error-icon {
+    font-size: 4rem;
+    color: #cbd5e1;
+    margin-bottom: 1.5rem;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .mis-turnos-page {
+.mt-error-card h2 {
+    color: #1e293b;
+    margin-bottom: 1rem;
+    font-weight: 800;
+}
+
+.mt-error-card p {
+    color: #64748b;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.mt-btn-login {
+    background: #0ea5e9;
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.mt-btn-login:hover {
+    background: #0284c7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+@keyframes mtFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 640px) {
+    .mt-page-wrapper {
         padding: 1rem;
     }
 
-    .page-header {
-        padding: 1.5rem 1rem;
-        margin-bottom: 1.5rem;
+    .mt-header-content {
+        padding: 1.5rem;
     }
 
-    .page-header h2 {
-        font-size: 1.75rem;
+    .mt-title-group {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
     }
 
-    .page-description {
-        font-size: 0.95rem;
+    .mt-icon-box {
+        margin: 0 auto;
     }
 
-    .error-message {
-        padding: 2.5rem 1.5rem;
-    }
-
-    .error-message p {
-        font-size: 1rem;
+    .mt-text-box h1 {
+        font-size: 1.5rem;
     }
 }

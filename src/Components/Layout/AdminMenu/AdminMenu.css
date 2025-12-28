@@ -1,81 +1,143 @@
-/* Sidebar colapsable */
+/* Modern Medical Sidebar */
 .admin-sidebar {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 0.5rem 0;
+  height: 100%;
+  padding: 1.5rem 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-.sidebar-menu {
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  /* Compact by default */
+  padding: 0 0.75rem;
+  transition: gap 0.3s ease;
+}
+
+.admin-layout__left:hover .sidebar-container {
+  gap: 2.25rem;
+  /* More spacing when expanded to show categories */
+}
+
+.sidebar-section {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  padding: 0 0.5rem;
+}
+
+.section-header {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.1em;
+  padding: 0 1rem;
+  opacity: 0;
+  height: 0;
+  margin-bottom: 0;
   overflow: hidden;
-  height: 100%;
-  justify-content: center;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.admin-layout__left:hover .section-header {
+  opacity: 1;
+  height: auto;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 1rem 0 1rem;
+}
+
+.section-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .sidebar-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.875rem 0.75rem;
-  border-radius: 10px;
-  color: rgba(255, 255, 255, 0.75);
+  gap: 1.25rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
-  transition: all 0.25s ease;
-  cursor: pointer;
-  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
   white-space: nowrap;
 }
 
 .sidebar-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
   color: #fff;
-  transform: translateX(3px);
+  transform: translateX(4px);
 }
 
 .sidebar-item.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-}
-
-.sidebar-item.active:hover {
-  transform: none;
+  background: rgba(14, 165, 233, 0.15);
+  color: #0ea5e9;
+  font-weight: 600;
 }
 
 .sidebar-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  font-size: 1.35rem;
+  /* Slightly larger for better visibility */
   min-width: 24px;
-  transition: transform 0.25s ease;
+  color: inherit;
+  transition: inherit;
 }
 
-.sidebar-item:hover .sidebar-icon {
-  transform: scale(1.1);
+.sidebar-item.active .sidebar-icon {
+  color: #0ea5e9;
+  filter: drop-shadow(0 0 8px rgba(14, 165, 233, 0.4));
 }
 
 .sidebar-label {
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   font-weight: 500;
   opacity: 0;
   transform: translateX(-10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: all 0.3s ease;
   pointer-events: none;
 }
 
-/* Mostrar labels al hover del menú lateral completo */
 .admin-layout__left:hover .sidebar-label {
   opacity: 1;
   transform: translateX(0);
   pointer-events: auto;
 }
 
-/* Responsive - ocultar en móviles */
+.active-indicator {
+  position: absolute;
+  left: -0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 20px;
+  background: #0ea5e9;
+  border-radius: 0 4px 4px 0;
+  box-shadow: 2px 0 8px rgba(14, 165, 233, 0.5);
+}
+
+/* Custom Scrollbar */
+.admin-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.admin-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
 @media only screen and (max-width: 1024px) {
   .admin-sidebar {
     display: none;

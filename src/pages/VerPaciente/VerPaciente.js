@@ -74,145 +74,209 @@ export default function VerPaciente() {
   if (!state.paciente) return <Loader />;
 
   return (
-    <div className="ver-paciente-page">
-      <Breadcrumbs />
+    <div className="vp-dashboard-container">
+      <header className="vp-header-tools">
+        <Breadcrumbs />
+      </header>
 
-      {/* Header con información del paciente */}
-      <div className="patient-header-card">
-        <div className="patient-avatar-section">
-          <div className="avatar-wrapper">
+      {/* Hero Profile Section */}
+      <section className="vp-hero-card">
+        <div className="vp-hero-main">
+          <div className="vp-avatar-container">
             <img
               src={state.paciente.avatar || avatar}
               alt="Paciente"
-              className="patient-avatar-img"
+              className="vp-avatar-img"
             />
+            <div className="vp-status-badge">Activo</div>
           </div>
-          <div className="patient-basic-info">
-            <h1 className="patient-name">{state.paciente.nombre || "No especifica"}</h1>
-            <div className="patient-dni">
-              <FaIdCard />
-              <span>{state.paciente.dni ? `CI: ${state.paciente.dni}` : "Sin CI"}</span>
+          <div className="vp-patient-meta">
+            <h1 className="vp-patient-name">{state.paciente.nombre || "No especifica"}</h1>
+            <p className="vp-patient-id">
+              <FaIdCard /> <span>{state.paciente.dni ? `CI: ${state.paciente.dni}` : "Identificación no registrada"}</span>
+            </p>
+          </div>
+        </div>
+
+        <div className="vp-contact-strip">
+          <div className="vp-contact-info">
+            <div className="vp-contact-pill">
+              <div className="vp-pill-icon">
+                <FaPhone />
+              </div>
+              <div>
+                <label>Teléfono</label>
+                <span>{state.paciente.telefono || "Asignar"}</span>
+              </div>
+            </div>
+            <div className="vp-contact-pill">
+              <div className="vp-pill-icon">
+                <FaEnvelope />
+              </div>
+              <div>
+                <label>Email</label>
+                <span>{state.paciente.email || "Asignar"}</span>
+              </div>
+            </div>
+            <div className="vp-contact-pill">
+              <div className="vp-pill-icon">
+                <FaCalendarAlt />
+              </div>
+              <div>
+                <label>Fecha Registro</label>
+                <span>
+                  {state.paciente.created_at
+                    ? new Date(state.paciente.created_at).toLocaleDateString()
+                    : "---"}
+                </span>
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        <div className="patient-contact-grid">
-          <div className="contact-item">
-            <div className="contact-icon">
-              <FaPhone />
-            </div>
-            <div className="contact-details">
-              <span className="contact-label">Teléfono</span>
-              <span className="contact-value">{state.paciente.telefono || "No especifica"}</span>
-            </div>
-          </div>
+      {/* Main Dashboard Grid */}
+      <div className="vp-grid-layout">
 
-          <div className="contact-item">
-            <div className="contact-icon">
-              <FaEnvelope />
+        {/* Turnos / Appointments Card */}
+        <section className="vp-card vp-turnos-card">
+          <div className="vp-card-header">
+            <div className="vp-card-title">
+              <div className="vp-icon-circle blue">
+                <FaCalendarAlt />
+              </div>
+              <h3>Próximos Turnos</h3>
             </div>
-            <div className="contact-details">
-              <span className="contact-label">Email</span>
-              <span className="contact-value">{state.paciente.email || "No especifica"}</span>
-            </div>
-          </div>
-
-          <div className="contact-item">
-            <div className="contact-icon">
-              <FaCalendarAlt />
-            </div>
-            <div className="contact-details">
-              <span className="contact-label">Fecha de Registro</span>
-              <span className="contact-value">
-                {state.paciente.created_at
-                  ? new Date(state.paciente.created_at).toLocaleDateString()
-                  : "No especifica"}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Sección de Doctores y Notas */}
-      <div className="info-cards-grid">
-        {/* Card de Doctores */}
-        <div className="info-card doctors-card">
-          <div className="card-header">
-            <h3>
-              <FaUserMd /> Doctores Asignados
-            </h3>
-            {user.rol !== "paciente" && user.rol !== "doctor" && (
-              <button className="btn-add-small" onClick={handleOpenModalDoctor}>
-                <FaPlus /> Agregar
+            {user.rol === "paciente" && (
+              <button className="vp-btn-action-small" onClick={() => (window.location.hash = "#reservar")}>
+                <FaPlus /> <span>Agendar</span>
               </button>
             )}
           </div>
 
-          <div className="card-content">
-            {state.doctores && state.doctores.length > 0 ? (
-              <div className="doctors-list">
-                {state.doctores.map((doctor) => (
-                  <div className="doctor-item" key={doctor._id}>
-                    <div className="doctor-info">
-                      <FaUserMd className="doctor-icon" />
-                      <span className="doctor-name">{doctor.nombre || "No especifica"}</span>
+          <div className="vp-card-list">
+            {state.turnos && state.turnos.length > 0 ? (
+              state.turnos.map((turno) => (
+                <div className="vp-list-item turno-item" key={turno._id}>
+                  <div className="vp-item-core">
+                    <div className="vp-item-details">
+                      <span className="vp-item-name">{turno.estudio?.tipo || "Consulta General"}</span>
+                      <span className="vp-item-sub">
+                        {turno.doctor ? `Dr. ${turno.doctor.nombre}` : "Doctor no asignado"}
+                      </span>
+                      <span className="vp-turno-date">
+                        {new Date(turno.fecha).toLocaleDateString()} - {new Date(turno.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
                     </div>
-                    {user.rol !== "paciente" && (
-                      <button
-                        className="btn-remove-doctor"
-                        onClick={() => eliminarDoctorDelPaciente(doctor._id)}
-                        disabled={loading}
-                      >
-                        {loading ? <LoaderIcon style={{ width: "15px", height: "15px" }} /> : <FaTimes />}
-                      </button>
-                    )}
                   </div>
-                ))}
-              </div>
+                  <div className="vp-item-status">
+                    <span className={`vp-badge-status ${turno.estado}`}>
+                      {turno.estado.charAt(0).toUpperCase() + turno.estado.slice(1)}
+                    </span>
+                  </div>
+                </div>
+              ))
             ) : (
-              <p className="empty-message">No hay doctores asignados</p>
+              <div className="vp-empty-state">
+                <p>No tienes turnos programados</p>
+              </div>
             )}
           </div>
-        </div>
+        </section>
 
-        {/* Card de Notas */}
+        {/* Assigned Doctors */}
+        <aside className="vp-card vp-doctors-card">
+          <div className="vp-card-header">
+            <div className="vp-card-title">
+              <div className="vp-icon-circle blue">
+                <FaUserMd />
+              </div>
+              <h3>Equipo Médico</h3>
+            </div>
+            {user.rol !== "paciente" && user.rol !== "doctor" && (
+              <button className="vp-btn-action-small" onClick={handleOpenModalDoctor}>
+                <FaPlus /> <span>Asignar</span>
+              </button>
+            )}
+          </div>
+
+          <div className="vp-card-list">
+            {state.doctores && state.doctores.length > 0 ? (
+              state.doctores.map((doctor) => (
+                <div className="vp-list-item" key={doctor._id}>
+                  <div className="vp-item-core">
+                    <div className="vp-doctor-avatar-mini">
+                      {doctor.nombre?.charAt(0) || "D"}
+                    </div>
+                    <div className="vp-item-details">
+                      <span className="vp-item-name">{doctor.nombre}</span>
+                      <span className="vp-item-sub">{doctor.especialidad || "Especialista"}</span>
+                    </div>
+                  </div>
+                  {user.rol !== "paciente" && (
+                    <button
+                      className="vp-btn-icon-delete"
+                      onClick={() => eliminarDoctorDelPaciente(doctor._id)}
+                      disabled={loading}
+                      title="Quitar doctor"
+                    >
+                      {loading ? <LoaderIcon /> : <FaTimes />}
+                    </button>
+                  )}
+                </div>
+              ))
+            ) : (
+              <div className="vp-empty-state">
+                <p>No hay doctores asignados</p>
+              </div>
+            )}
+          </div>
+        </aside>
+
+        {/* Medical Notes */}
         {user.rol !== "paciente" && (
-          <div className="info-card notes-card">
-            <div className="card-header">
-              <h3>
-                📝 Notas Médicas
-              </h3>
+          <main className="vp-card vp-notes-card">
+            <div className="vp-card-header">
+              <div className="vp-card-title">
+                <div className="vp-icon-circle yellow">
+                  <FaFileAlt />
+                </div>
+                <h3>Evolución y Notas</h3>
+              </div>
               {user.rol !== "doctor" && (
-                <button className="btn-add-small" onClick={() => setNotaModalOpen(true)}>
-                  <FaPlus /> Agregar
+                <button className="vp-btn-action-small" onClick={() => setNotaModalOpen(true)}>
+                  <FaPlus /> <span>Nueva Nota</span>
                 </button>
               )}
             </div>
 
-            <div className="card-content">
+            <div className="vp-notes-timeline">
               {state.paciente.notas && state.paciente.notas.length > 0 ? (
-                <div className="notes-list">
-                  {state.paciente.notas.map((nota, index) => (
-                    <div className="note-item" key={index}>
-                      <div className="note-header">
-                        <span className="note-author">{nota.author}</span>
-                        <span className="note-date">
+                state.paciente.notas.map((nota, index) => (
+                  <div className="vp-timeline-item" key={index}>
+                    <div className="vp-timeline-marker"></div>
+                    <div className="vp-note-bubble">
+                      <div className="vp-note-meta">
+                        <span className="vp-note-author">{nota.author}</span>
+                        <span className="vp-note-date">
                           {new Date(nota.fecha).toLocaleDateString()}
                         </span>
                       </div>
-                      <p className="note-content">{nota.nota || "No especifica"}</p>
+                      <p className="vp-note-body">{nota.nota || "Sin contenido"}</p>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))
               ) : (
-                <p className="empty-message">No hay notas registradas</p>
+                <div className="vp-empty-state">
+                  <p>Inicie el registro de notas médicas</p>
+                </div>
               )}
             </div>
-          </div>
+          </main>
         )}
       </div>
 
-      {/* Sección de Documentos */}
+      {/* Documents Section */}
       {(userLogueado.rol === "secretaria" ||
         userLogueado.rol === "paciente" ||
         (userLogueado.rol === "doctor" &&
@@ -221,27 +285,30 @@ export default function VerPaciente() {
               doctor._id === userID &&
               doctor.pacientes.includes(state.paciente._id)
           ))) && (
-          <div className="documents-section">
-            <div className="section-header">
-              <h2>
-                <FaFolder /> Documentos del Paciente
-              </h2>
+          <section className="vp-section-documents">
+            <div className="vp-section-header">
+              <div className="vp-card-title">
+                <div className="vp-icon-circle teal">
+                  <FaFolderOpen />
+                </div>
+                <h2>Expediente Digital</h2>
+              </div>
               {userLogueado.rol !== "paciente" && (
                 <button
-                  className="btn-upload-doc"
+                  className="vp-btn-primary"
                   onClick={() => {
                     setNombreArchivo("");
                     setArchivos([]);
                     dispatch({ type: "TOGGLE_MODAL" });
                   }}
                 >
-                  <FaPlus /> Subir Documentos
+                  <FaPlus /> Subir Documentación
                 </button>
               )}
             </div>
 
             {state.documentos.length > 0 ? (
-              <div className="folders-grid">
+              <div className="vp-folders-masonry">
                 {state.documentos.map((doc, index) => (
                   <FolderCard
                     key={index}
@@ -255,41 +322,43 @@ export default function VerPaciente() {
                 ))}
               </div>
             ) : (
-              <div className="empty-documents">
-                <FaFileAlt />
-                <p>No hay documentos disponibles</p>
+              <div className="vp-empty-container-xl">
+                <div className="vp-empty-illustration">
+                  <FaFolder size={48} />
+                </div>
+                <p>El expediente no contiene archivos digitales aún</p>
               </div>
             )}
-          </div>
+          </section>
         )}
 
-      {/* Modal de Subir Archivos */}
+      {/* Modals & Utils */}
       {state.modalOpen && (
-        <div className="modal-overlay" onClick={() => dispatch({ type: "TOGGLE_MODAL" })}>
-          <div className="modal-upload" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header-upload">
-              <h3>Subir Documentos</h3>
-              <FaTimes
-                className="close-icon"
-                onClick={() => dispatch({ type: "TOGGLE_MODAL" })}
-              />
+        <div className="vp-modal-overlay" onClick={() => dispatch({ type: "TOGGLE_MODAL" })}>
+          <div className="vp-modal-content scale-in" onClick={(e) => e.stopPropagation()}>
+            <div className="vp-modal-header">
+              <h3>Gestión de Documentos</h3>
+              <button className="vp-btn-close" onClick={() => dispatch({ type: "TOGGLE_MODAL" })}>
+                <FaTimes />
+              </button>
             </div>
 
-            <div className="modal-body-upload">
-              <div className="form-group-upload">
-                <label className="label-upload">Nombre de la Carpeta</label>
+            <div className="vp-modal-body">
+              <div className="vp-form-group">
+                <label>Categoría / Carpeta</label>
                 <input
                   type="text"
-                  placeholder="Ej: Estudios de Laboratorio"
+                  placeholder="Ej: Análisis de Sangre"
                   value={state.nombreArchivo}
                   onChange={(e) => setNombreArchivo(e.target.value)}
+                  className="vp-input"
                 />
               </div>
 
-              <div className="form-group-upload">
-                <label>Seleccionar Archivos</label>
+              <div className="vp-upload-zone">
                 <input
                   type="file"
+                  id="vp-file-input"
                   multiple
                   onChange={(e) =>
                     setArchivos([
@@ -297,19 +366,22 @@ export default function VerPaciente() {
                       ...Array.from(e.target.files),
                     ])
                   }
-                  className="file-input"
+                  hidden
                 />
+                <label htmlFor="vp-file-input" className="vp-upload-label">
+                  <FaPlus />
+                  <span>Seleccionar Archivos</span>
+                </label>
               </div>
 
               {state.archivos.length > 0 && (
-                <div className="files-preview">
-                  <strong>Archivos seleccionados: {state.archivos.length}</strong>
-                  <ul className="files-list">
+                <div className="vp-selected-files">
+                  <p>Archivos listos para subir ({state.archivos.length})</p>
+                  <div className="vp-files-pills">
                     {state.archivos.map((file, index) => (
-                      <li key={index} className="file-item">
-                        <span>{file.name}</span>
+                      <div key={index} className="vp-file-pill">
+                        <span className="vp-truncate">{file.name}</span>
                         <button
-                          className="btn-remove-file"
                           onClick={() => {
                             const nuevos = [...state.archivos];
                             nuevos.splice(index, 1);
@@ -318,23 +390,21 @@ export default function VerPaciente() {
                         >
                           <FaTimes />
                         </button>
-                      </li>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               )}
 
-              <button className="btn-submit-upload" onClick={handleUpload} disabled={state.loadingFile}>
+              <button
+                className="vp-btn-submit-full"
+                onClick={handleUpload}
+                disabled={state.loadingFile || !state.nombreArchivo || state.archivos.length === 0}
+              >
                 {state.loadingFile ? (
-                  <>
-                    <LoaderIcon className="loader-icon-small" />
-                    <span>Subiendo...</span>
-                  </>
+                  <><span className="vp-spinner"></span> Subiendo...</>
                 ) : (
-                  <>
-                    <FaPlus />
-                    <span>Subir Archivos</span>
-                  </>
+                  "Iniciar Carga"
                 )}
               </button>
             </div>
@@ -342,7 +412,6 @@ export default function VerPaciente() {
         </div>
       )}
 
-      {/* Modales */}
       {notaModalOpen && (
         <ModalNota
           onClose={() => setNotaModalOpen(false)}
@@ -377,7 +446,7 @@ export default function VerPaciente() {
   );
 }
 
-// Componente de Carpeta Rediseñado
+// FolderCard Redesigned
 const FolderCard = ({
   doc,
   dispatch,
@@ -388,90 +457,70 @@ const FolderCard = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const getFileIcon = (url) => {
-    if (url.includes(".pdf") || url.includes(".PDF")) return <FaFilePdf className="file-type-icon pdf" />;
-    if (url.includes(".jpg") || url.includes(".png") || url.includes(".jpeg")) return <FaFileImage className="file-type-icon image" />;
-    return <FaFileAlt className="file-type-icon" />;
-  };
-
   return (
-    <div className={`folder-card ${isOpen ? "open" : ""}`}>
-      <div className="folder-header" onClick={() => setIsOpen(!isOpen)}>
-        <div className="folder-title">
-          {isOpen ? <FaFolderOpen className="folder-icon open" /> : <FaFolder className="folder-icon" />}
-          <span>{doc.nombreArchivo || "Sin nombre"}</span>
-          <span className="file-count">{doc.archivos.length} archivo(s)</span>
+    <div className={`vp-folder-wrap ${isOpen ? "active" : ""}`}>
+      <div className="vp-folder-header" onClick={() => setIsOpen(!isOpen)}>
+        <div className="vp-folder-info">
+          <div className="vp-folder-icon-box">
+            {isOpen ? <FaFolderOpen /> : <FaFolder />}
+          </div>
+          <div className="vp-folder-text">
+            <h4 className="vp-folder-title">{doc.nombreArchivo || "Sin nombre"}</h4>
+            <span className="vp-file-count">{doc.archivos.length} elementos</span>
+          </div>
         </div>
-        {userLogueado.rol !== "paciente" && (
-          <button
-            className="btn-add-to-folder"
-            onClick={(e) => {
-              e.stopPropagation();
-              setNombreArchivo(doc.nombreArchivo);
-              dispatch({ type: "TOGGLE_MODAL" });
-            }}
-          >
-            <FaPlus /> Agregar
-          </button>
-        )}
+        <div className="vp-folder-actions">
+          {userLogueado.rol !== "paciente" && (
+            <button
+              className="vp-btn-add-file"
+              onClick={(e) => {
+                e.stopPropagation();
+                setNombreArchivo(doc.nombreArchivo);
+                dispatch({ type: "TOGGLE_MODAL" });
+              }}
+            >
+              <FaPlus />
+            </button>
+          )}
+          <div className={`vp-arrow ${isOpen ? "rotated" : ""}`}></div>
+        </div>
       </div>
 
       {isOpen && (
-        <div className="folder-content">
-          <div className="files-grid">
+        <div className="vp-folder-body">
+          <div className="vp-files-grid">
             {doc.archivos.map((archivo) => (
-              <div className="file-card" key={archivo._id}>
-                <div className="file-preview">
-                  {archivo.urlArchivo.includes(".pdf") ||
-                    archivo.urlArchivo.includes(".PDF") ||
-                    archivo.urlArchivo.includes(".xlsx") ||
-                    archivo.urlArchivo.includes(".dmc") ? (
-                    <div className="pdf-placeholder">
-                      <FaFilePdf />
-                      <span>PDF</span>
-                    </div>
+              <div className="vp-file-card" key={archivo._id}>
+                <div className="vp-file-preview-box">
+                  {archivo.urlArchivo.toLowerCase().match(/\.(jpg|jpeg|png|gif)$/) ? (
+                    <img src={archivo.urlArchivo} alt="Vista previa" className="vp-file-thumb" />
                   ) : (
-                    <img
-                      src={archivo.urlArchivo}
-                      alt="Archivo"
-                      className="file-thumbnail"
-                    />
+                    <div className="vp-file-generic-icon">
+                      {archivo.urlArchivo.toLowerCase().includes(".pdf") ? <FaFilePdf color="#ef4444" /> : <FaFileAlt color="#64748b" />}
+                    </div>
                   )}
-                </div>
-
-                <div className="file-info">
-                  <span className="file-name">{archivo.originalFilename}</span>
-                  <div className="file-actions">
-                    <button
-                      style={{
-                        border: "none",
-                        backgroundColor: "green",
-                      }}
-                      onClick={() => window.open(archivo.urlArchivo, "_blank")}
-                      className="btn-eye-file"><FaEye /></button>
-                    <a
-                      href={archivo.urlArchivo}
-                      download
-
-                      className="btn-download-file"
-                    >
-                      <FaDownload /> Descargar
+                  <div className="vp-file-overlay">
+                    <button onClick={() => window.open(archivo.urlArchivo, "_blank")} title="Ver">
+                      <FaEye />
+                    </button>
+                    <a href={archivo.urlArchivo} download title="Descargar">
+                      <FaDownload />
                     </a>
-                    {userLogueado.rol !== "paciente" && (
-                      <button
-                        className="btn-delete-file"
-                        onClick={() => eliminarArchivo(archivo._id, doc.nombreArchivo)}
-                        disabled={loading}
-                      >
-                        {loading ? (
-                          <LoaderIcon style={{ width: "15px", height: "15px" }} />
-                        ) : (
-                          <MdDeleteForever />
-                        )}
-                      </button>
-                    )}
-
                   </div>
+                </div>
+                <div className="vp-file-footer">
+                  <span className="vp-file-label" title={archivo.originalFilename}>
+                    {archivo.originalFilename}
+                  </span>
+                  {userLogueado.rol !== "paciente" && (
+                    <button
+                      className="vp-btn-delete-item"
+                      onClick={() => eliminarArchivo(archivo._id, doc.nombreArchivo)}
+                      disabled={loading}
+                    >
+                      <MdDeleteForever />
+                    </button>
+                  )}
                 </div>
               </div>
             ))}

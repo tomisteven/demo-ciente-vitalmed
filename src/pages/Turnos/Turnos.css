@@ -1,74 +1,97 @@
-.turnos-page {
-    padding: 2rem;
+:root {
+    --t-primary: #0ea5e9;
+    --t-primary-hover: #0284c7;
+    --t-bg: #f8fafc;
+    --t-card-bg: #ffffff;
+    --t-text-main: #1e293b;
+    --t-text-muted: #64748b;
+    --t-border: #e2e8f0;
+    --t-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --t-radius: 12px;
+}
+
+.t-dashboard-container {
     max-width: 1400px;
     margin: 0 auto;
+    padding: 1.5rem 2.5rem 4rem;
+    background-color: var(--t-bg);
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, sans-serif;
 }
 
-.page-header {
-    margin-bottom: 2rem;
+.t-header-tools {
+    margin-bottom: 2.5rem;
 }
 
-.page-header h2 {
-    margin: 0 0 0.5rem 0;
-    color: #ffffff;
-    font-size: 2rem;
+.t-page-title {
+    margin-top: 1.5rem;
 }
 
-.page-description {
-    color: #ffffff;
+.t-page-title h2 {
     margin: 0;
-    font-size: 1rem;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--t-text-main);
+    letter-spacing: -0.02em;
 }
 
-/* Tabs */
-.tabs-container {
+.t-page-title p {
+    margin: 0.5rem 0 0;
+    color: var(--t-text-muted);
+    font-size: 1.1rem;
+}
+
+/* Tabs Navigation */
+.t-tabs-nav {
     display: flex;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
-    border-bottom: 2px solid #e0e0e0;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    padding: 0.5rem;
+    background: #f1f5f9;
+    border-radius: 14px;
+    width: fit-content;
 }
 
-.tab {
-    background: none;
+.t-tab-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 1.5rem;
     border: none;
-    padding: 1rem 2rem;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #000000;
-    cursor: pointer;
-    position: relative;
-    transition: all 0.3s;
-}
-
-.tab:hover {
-    color: #000000;
-    background: #f8f9fa;
-}
-
-.tab-active {
-    color: #000000;
+    background: transparent;
+    color: var(--t-text-muted);
     font-weight: 600;
-    background-color: #8d98c7ff;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.tab-active::after {
-    content: "";
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: #007bff;
+.t-tab-item:hover {
+    color: var(--t-text-main);
+    background: rgba(255, 255, 255, 0.5);
 }
 
-.tab-content {
-    animation: fadeIn 0.3s ease-in;
+.t-tab-item.active {
+    background: white;
+    color: var(--t-primary);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-@keyframes fadeIn {
+.t-tab-icon {
+    font-size: 1.1rem;
+    display: flex;
+}
+
+/* Content Transitions */
+.t-tab-content-wrapper {
+    animation: fadeInUp 0.4s ease-out forwards;
+}
+
+@keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(20px);
     }
 
     to {
@@ -77,27 +100,47 @@
     }
 }
 
+/* Common Card Style for Turnos Components (Injected via CSS inheritance or classes) */
+.t-card-base {
+    background: white;
+    border-radius: var(--t-radius);
+    border: 1px solid var(--t-border);
+    box-shadow: var(--t-shadow);
+    padding: 2rem;
+}
+
+/* External Component Fixes */
+.gestion-estudios,
+.calendario-turnos,
+.lista-turnos-admin,
+.crear-disponibilidad-form {
+    background: white;
+    border-radius: var(--t-radius);
+    border: 1px solid var(--t-border);
+    box-shadow: var(--t-shadow);
+    padding: 2.5rem;
+}
+
 /* Responsive */
+@media (max-width: 900px) {
+    .t-tabs-nav {
+        width: 100%;
+        overflow-x: auto;
+        padding: 0.4rem;
+    }
+
+    .t-tab-item {
+        padding: 0.7rem 1.2rem;
+        white-space: nowrap;
+    }
+}
+
 @media (max-width: 768px) {
-    .turnos-page {
-        padding: 1rem;
+    .t-dashboard-container {
+        padding: 1rem 1.5rem;
     }
 
-    .page-header h2 {
-        font-size: 1.5rem;
-    }
-
-    .tabs-container {
-        flex-direction: column;
-        gap: 0;
-    }
-
-    .tab {
-        padding: 0.75rem 1rem;
-        border-bottom: 1px solid #e0e0e0;
-    }
-
-    .tab-active::after {
-        display: none;
+    .t-page-title h2 {
+        font-size: 1.8rem;
     }
 }

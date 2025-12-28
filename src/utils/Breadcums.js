@@ -27,7 +27,7 @@ export const Breadcrumbs = () => {
   return (
     <nav className="breadcrumbs-with-back">
       <button className="back-button" onClick={handleBack}>
-        <Icon name="arrow left" color="black" size="large" />
+        <Icon name="arrow left" color="white" size="large" />
         Atrás
       </button>
     </nav>
