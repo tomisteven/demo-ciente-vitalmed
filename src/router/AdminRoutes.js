@@ -18,6 +18,7 @@ import MisTurnosPage from "../pages/MisTurnos";
 import UsuarioLogueado from "../pages/Dashboard";
 import LandingPage from "../pages/Landing";
 import Cursos from "../pages/Cursos";
+import DemoPage from "../pages/Demo";
 
 import DocumentacionSistema from "../pages/DocumentacionSistema/DocumentacionSistema";
 
@@ -46,6 +47,7 @@ export function AdminRoutes({ notificacion }) {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/cursos" element={<Cursos />} />
+        <Route path="/demo" element={<DemoPage />} />
         <Route path="/admin/auth" element={<Auth />} />
         <Route path="/documentacion" element={<DocumentacionSistema />} />
         <Route path="*" element={<Navigate to="/" />} />
